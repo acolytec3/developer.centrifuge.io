@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import {Box, Image, Grid} from "grommet";
+import {Box, Image, ResponsiveContext} from "grommet";
 //import {NavBar} from "@centrifuge/axis-nav-bar";
 import {NavBar} from "./navbar"
 import {MenuItem} from "@centrifuge/axis-nav-bar";
@@ -19,6 +19,8 @@ const Logo = styled(Image)`
 
 const Nav = (props) => {
     const [selectedRoute, setSelectedRoute] = useState("/");
+    const [searchOpen, setSearchOpen] = React.useState(false);
+
     const menuItems: MenuItem[] = [
         {
             label: "Centrifuge P2P Node",
@@ -62,32 +64,67 @@ const Nav = (props) => {
     };
 
     return (
-        <Box direction="row" 
-        fill="horizontal"
-        align="stretch"
-        width="xxlarge" > 
-            <NavBar 
-                    pad={"medium"}
-                    margin={{"right":"medium"}}
-                    logo={<Logo src={wordmark}                    
-                    onClick={ () => { onRouteClick('/') }       
-                    }/>}
-                    mainMenuAlignment="right"
-                    border={false}
-                    menuItems={menuItems}
-                    theme={theme}
-                    selectedRoute={selectedRoute}
-                    onRouteClick={
-                        (item : MenuItem) => {
-                            onRouteClick(item.route);
+        <ResponsiveContext.Consumer>
+            {size => size !== "small" ? 
+            <Box direction="row" 
+            fill="horizontal"
+            align="stretch"
+            width="xxlarge" > 
+                <NavBar 
+                        pad={"medium"}
+                        margin={{"right":"medium"}}
+                        logo={<Logo src={wordmark}                    
+                        onClick={ () => { onRouteClick('/') }       
+                        }/>}
+                        mainMenuAlignment="right"
+                        border={false}
+                        menuItems={menuItems}
+                        theme={theme}
+                        selectedRoute={selectedRoute}
+                        onRouteClick={
+                            (item : MenuItem) => {
+                                onRouteClick(item.route);
+                            }
                         }
-                    }
-                    overlayWidth="100vw"
-                    >                                       
-                <Search />
-            </NavBar>
-        </Box>
-     
+                        overlayWidth="100vw"
+                        >
+                    <Box style={{minHeight: '48px', padding: '12px'}} flex={false}>
+                        <Search open={searchOpen} setOpen={value => setSearchOpen(value)}/>
+                    </Box>                                              
+                    
+                </NavBar>
+            </Box>
+            : 
+            <Box direction="row" 
+            fill="horizontal"
+            align="stretch"
+            width="xxlarge" > 
+                <Logo margin={{"left":"medium"}} src={wordmark}                    
+                            onClick={ () => { onRouteClick('/') }       
+                            }/>
+                <Box style={{minHeight: '48px', padding: '12px'}} flex={true} alignContent="end">
+                    <Search open={searchOpen} setOpen={value => setSearchOpen(value)}/>
+                </Box>    
+                <NavBar 
+                        pad={"medium"}
+                        margin={{"right":"medium"}}
+
+                        mainMenuAlignment="right"
+                        border={false}
+                        menuItems={menuItems}
+                        theme={theme}
+                        selectedRoute={selectedRoute}
+                        onRouteClick={
+                            (item : MenuItem) => {
+                                onRouteClick(item.route);
+                            }
+                        }
+                        overlayWidth="100vw"
+                        >
+                </NavBar>
+            </Box>
+            }
+        </ResponsiveContext.Consumer>
     );
 };
 
