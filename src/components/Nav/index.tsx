@@ -67,6 +67,8 @@ const Nav = (props) => {
         align="stretch"
         width="xxlarge" > 
             <NavBar 
+                    pad={"medium"}
+                    margin={{"right":"medium"}}
                     logo={<Logo src={wordmark}                    
                     onClick={ () => { onRouteClick('/') }       
                     }/>}
